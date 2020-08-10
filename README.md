@@ -33,3 +33,13 @@ To run the application, simply execute `npm start` and access the application in
 Note that you can configure the port by editing the desired configuration file. If you do this, you should access the application in the port that you specified.
 
 If, by any reason, the configuration through these files fail, the default port is `9090`.
+
+The application uses HTTPS. This requires a SSL certificate that, in turn, requires a private RSA key to sign it. For the purpose of this demonstration, both the certificate and the key are available in the server-side under the directory `/bin`.  
+
+
+## Tutorial
+Even though the application is simple, there are a few notes that should be specified.
+
+*
+*
+*
