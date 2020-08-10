@@ -1,0 +1,22 @@
+{
+  "name": "gochallenge",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "config": "^3.3.1",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jquery": "^3.5.1",
+    "morgan": "~1.9.1",
+    "nunjucks": "^3.2.2",
+    "pug": "2.0.0-beta11"
+  }
+}

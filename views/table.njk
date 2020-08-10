@@ -1,0 +1,39 @@
+<div id="weather-table">
+    <table id="citiesTable">
+        <tr>
+            <th onclick="sortBy('name')">City name</th>
+            <th onclick="sortBy('temperature')">Temperature</th>
+            <th onclick="sortBy('maxTemperature')">Max</th>
+            <th onclick="sortBy('minTemperature')">Min</th>
+            <th onclick="sortBy('sunrise')">Sunrise time</th>
+            <th onclick="sortBy('sunset')">Sunset time</th>
+            <th onclick="sortBy('lastUpdated')">Last updated</th>
+        </tr>
+        {% for city in cities %}
+            <tr>
+                <td>
+                    {{ city.name }}
+                </td>
+                <td>
+                    {{ temperatureToString(city.temperature, unitSystem) }}
+                </td>
+                <td>
+                    {{ temperatureToString(city.maxTemperature, unitSystem) }}
+                </td>
+                <td>
+                    {{ temperatureToString(city.minTemperature, unitSystem) }}
+                </td>
+                <td>
+                    {{ millisecondsToString(city.sunrise, "medium") }}
+                </td>
+                <td>
+                    {{ millisecondsToString(city.sunset, "medium") }}
+                </td>
+                <td>
+                    {{ millisecondsToString(city.lastUpdated, "long") }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <button type="button" id="update-all" onclick="updateAll()"> Update all </button>
+</div>

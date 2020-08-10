@@ -1,0 +1,61 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <script
+                src="https://code.jquery.com/jquery-1.12.4.js"
+                integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+                crossorigin="anonymous"></script>
+        <link href="public/stylesheets/style.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="public/javascripts/searchbar.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <!-- Sidebar -->
+        <div class="ul-city-sidebar">
+            <h3>Manage Cities</h3>
+            <ul>
+                {% for city in cities %}
+                    <div style="background-color: #565676; border-bottom-style: solid; border-bottom-color: #0d1521; margin-top: 2px">
+                        <li>
+                            <span>{{ city.name }}</span>
+                        </li>
+                        <a onclick="updateCity('{{ city.name }}')"><span class="icon-spinner11"></span></a>
+                        <a onclick="deleteCity('{{ city.name }}')"><span class="icon-bin"></span></a>
+                        <a onclick="openModal('{{ city.name }}')"><span class="icon-eye"></span></a>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- Page Content -->
+        <div class="page-content">
+            <form autocomplete="off" class="searchBar">
+                <div class="autocomplete">
+                    <input id="cityInput" type="text" placeholder="Search city name..."/>
+                    <button type="button" id="add-city" onclick="addCity()"> Add city </button>
+                    <select id="selectUnitSystem">
+                        <option>Metric</option>
+                        <option>Imperial</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        {% if cities | length > 0 %}
+            <!-- Table -->
+            {% include "table.njk" %}
+            <!-- Bar chart -->
+            {% include "chart.njk" %}
+        {% endif %}
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h1 id="cityNameH1"></h1>
+                <p id="cityData"></p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+    autocomplete(document.getElementById("cityInput"));
+</script>
