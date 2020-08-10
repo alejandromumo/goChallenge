@@ -1,19 +1,10 @@
-const cityData = require('../resources/city_data.json');
+const cityData = require('../resources/city.list.json');
 
 /**
  * Defines the unit system to use in the application
  * @type {string}
  */
 var unitSystem = "metric";
-
-function getCitiesNames(){
-    // let array = [];
-    // cityData.forEach(function (city) {
-    //     array.push(city.name);
-    // });
-    // TODO use cityData
-    return ["Porto", "Lisbon", "Aveiro", "Madrid", "New York", "Rio de Janeiro", "Paris"];
-}
 
 function getCurrentDate(){
     return Date.now() / 1000;
@@ -66,7 +57,6 @@ function temperatureToString(temperature, unitSystem){
 
 
 
-exports.cityNames = getCitiesNames();
 exports.currentDate = getCurrentDate;
 exports.millisecondsToString = millisecondsToString;
 exports.temperatureToString = temperatureToString;

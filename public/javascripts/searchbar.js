@@ -1,10 +1,16 @@
 function autocomplete(inp) {
-    const arr = ["Porto", "Lisbon", "Aveiro", "Madrid", "New York", "Rio de Janeiro", "Paris"];
+    const arr = JSON.parse(localStorage.getItem("cityData") || "[]");
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
     var currentFocus;
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
+        if(inp.value.length < 3)
+        {
+            if($("#cityInputautocomplete-list").length)
+                $("#cityInputautocomplete-list").css("display", "none");
+            return;
+        }
         var a, b, i, val = this.value;
         /*close any already open lists of autocompleted values*/
         closeAllLists();
@@ -16,6 +22,7 @@ function autocomplete(inp) {
         a.setAttribute("class", "autocomplete-items");
         /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
+        var totalMatches = 0;
         /*for each item in the array...*/
         for (i = 0; i < arr.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
@@ -27,6 +34,7 @@ function autocomplete(inp) {
                 b.innerHTML += arr[i].substr(val.length);
                 /*insert a input field that will hold the current array item's value:*/
                 b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                totalMatches += 1;
                 /*execute a function when someone clicks on the item value (DIV element):*/
                 b.addEventListener("click", function(e) {
                     /*insert the value for the autocomplete text field:*/
@@ -38,6 +46,8 @@ function autocomplete(inp) {
                 a.appendChild(b);
             }
         }
+        if(totalMatches === 0)
+            a.style.display = "none";
     });
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function(e) {
@@ -158,17 +168,6 @@ function deleteCity(cityName){
 }
 
 
-$(document).ready(function () {
-    $("#cityInput").keyup(
-        function (e) {
-            if (e.key === 'Enter' || e.code === 13) {
-                $("#add-city").click();
-                return false;
-            }
-        }
-    );
-})
-
 function openModal(cityName) {
     $.ajax({
         type: 'GET',
@@ -189,15 +188,47 @@ function closeModal() {
     $("#myModal").css("display", "none");
 }
 
+$(document).ready(function () {
+    if(localStorage.getItem("cityData") === null)
+    {
+        $.ajax({
+            type: 'GET',
+            url: `/api/cities/cityData`,
+            success: function (data) {
+                localStorage.setItem("cityData", JSON.stringify(data));
+            },
+            error: function(xhr, textStatus, thrownError){
+                alert(xhr.statusText);
+            }
+        });
+    }
+    // Listen to enter event in search bar
+    $("#cityInput").keyup(
+        function (e) {
+            if (e.key === 'Enter' || e.code === 13) {
+                $("#add-city").click();
+                return false;
+            }
+        }
+    );
+})
+
 $(document).ready(function(){
-    $("#selectUnitSystem").val(localStorage.getItem("metricSystem"));
+    if(localStorage.getItem("metricSystem") === null)
+    {
+        $("#selectUnitSystem").val("metric");
+        localStorage.setItem("metricSystem", "metric");
+    }
+    else
+        $("#selectUnitSystem").val(localStorage.getItem("metricSystem"));
     $("#selectUnitSystem").change(function(){
         var newSystem = $(this).children("option:selected").val();
+        $("#selectUnitSystem").val(newSystem);
         $.ajax({
             type: 'PUT',
             url: `/api/config/metricSystem/${newSystem}`,
             success: function (data) {
-                localStorage.setItem("metricSystem", newSystem);
+                localStorage.setItem("metricSystem", newSystem.toLowerCase());
                 location.reload();
             },
             error: function(xhr, textStatus, thrownError){
@@ -211,7 +242,7 @@ $(document).ready(function(){
  * Function to draw a simple bar plot using chart.js library.
  */
 function drawPlot() {
-    const cities = JSON.parse(localStorage.getItem("cities"));
+    const cities = JSON.parse(localStorage.getItem("cities") || "[]");
     if(cities.length === 0)
         return;
     var chrt = document.getElementById("chartCanvas").getContext("2d");
@@ -224,7 +255,7 @@ function drawPlot() {
     var data = {
         labels: labels,
         datasets: [{
-            label: `Temperature (${localStorage.getItem("metricSystem").toLowerCase() === "metric" ? "ºC" : "ºF"})`,
+            label: `Temperature (${localStorage.getItem("metricSystem") === "metric" ? "ºC" : "ºF"})`,
             backgroundColor: "rgba(220,220,220,0.8)",
             borderColor: "rgb(86,86,118)",
             hoverBackgroundColor: "rgb(51,51,71)",
@@ -232,7 +263,7 @@ function drawPlot() {
             data: temperatures
         }]
     };
-    options = {
+    const options = {
         scales:{
             type: "linear",
             display: true,
@@ -244,6 +275,11 @@ function drawPlot() {
                     autoSkip: false,
                     maxRotation: 90,
                     minRotation: 90
+                }
+            }],
+            yAxes:[{
+                ticks:{
+                    suggestedMin: 0
                 }
             }]
         }
@@ -265,9 +301,7 @@ function sortBy(sortBy) {
         type: 'PUT',
         url: `/api/cities/sort/${sortBy}?ascending=${ascending}`,
         success: function (data) {
-            console.log("Success request " + ascending);
             localStorage.setItem("cities", JSON.stringify(data.cities));
-            console.log(data.cities);
             localStorage.setItem("ascending", ascending === "true" ? "false": "true");
             location.reload();
         },
@@ -284,7 +318,8 @@ function sortBy(sortBy) {
  * @returns {string|*}
  */
 function convertTemperature(temperature) {
-    const unitSystem = localStorage.getItem("metricSystem").toLowerCase();
+    const unitSystem = localStorage.getItem("metricSystem");
+
     if (!temperature)
         return "";
     if (unitSystem === "metric")
@@ -294,3 +329,4 @@ function convertTemperature(temperature) {
         return temperatureF.toPrecision(3);
     }
 }
+

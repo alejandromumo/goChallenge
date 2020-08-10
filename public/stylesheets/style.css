@@ -57,11 +57,13 @@ body {
   border-bottom: none;
   border-top: none;
   display: block;
-  width: 10%;
   z-index: 99;
   /*position the autocomplete items to be the same width as the container:*/
   top: 45px;
   left: 25%;
+  overflow: scroll;
+  max-height: 500px;
+  width: auto;
 }
 .autocomplete-items div {
   padding: 10px;

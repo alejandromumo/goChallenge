@@ -20,6 +20,11 @@ var currentCitiesObjects = utils.currentCities;
  */
 var citiesArray = utils.currentCitiesArray;
 
+var citiesNames = [];
+utils.cityData.forEach(function (city) {
+    citiesNames.push(city.name);
+})
+
 
 /**
  * GET method to access the API landing page.
@@ -103,7 +108,7 @@ router.put('/cities/sort/:sortBy', urlencodedParser, function (req, res, next) {
     try{
         res.status(200);
         var sortBy = req.params.sortBy;
-        citiesArray = citiesArray.sort(function (itemA, itemB) {
+        utils.currentCitiesArray = citiesArray.sort(function (itemA, itemB) {
             const isAscending = req.query.ascending === "true";
             const result = itemA[sortBy] > itemB[sortBy];
             if(result === true )
@@ -196,9 +201,16 @@ router.delete('/cities/city/:name', function(req, res, next) {
     }
     try{
         delete currentCitiesObjects[req.params.name];
-        citiesArray.splice(citiesArray.indexOf(req.params.name), 1);
+        var newArray = citiesArray.filter((el) => {
+            return el.id !== getCityID(req.params.name);
+        });
+        console.log("So far so good");
+        utils.currentCitiesArray = newArray;
+        citiesArray = utils.currentCitiesArray;
         res.status(200);
-        res.statusMessage = `City ${req.params.name} deleted successfully`;
+        console.log("So far so good 2");
+        res.statusMessage = `City deleted successfully`;
+        console.log("So far so good 3");
         res.send({cities: citiesArray})
     } catch(error){
         res.statusMessage = `An error occurred deleting the city. ${error}`;
@@ -275,6 +287,16 @@ router.put('/config/metricSystem/:name', function (req, res, next) {
         }
     }
 });
+
+router.get('/cities/cityData', function (req, res, next) {
+    try{
+        res.status(200);
+        res.send(citiesNames);
+    } catch(error){
+        next(error);
+    }
+
+})
 
 
 
