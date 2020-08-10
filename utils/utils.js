@@ -6,10 +6,20 @@ const cityData = require('../resources/city.list.json');
  */
 var unitSystem = "metric";
 
+/**
+ * Returns the current date, in seconds.
+ * @returns {number}
+ */
 function getCurrentDate(){
     return Date.now() / 1000;
 }
 
+/**
+ * Retrieves the string representation of a date, in seconds.
+ * @param dateInSeconds
+ * @param type
+ * @returns {string}
+ */
 function millisecondsToString(dateInSeconds, type){
     if(dateInSeconds === null)
         return "";

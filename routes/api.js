@@ -1,12 +1,11 @@
 const express = require('express');
-const config = require('config');
 const utils = require('../utils/utils');
 const axios = require('axios');
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 
 const router = express.Router();
 
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 /**
  * JSON to store the currently existing cities JSON objects. It enables O(1) access.
@@ -20,6 +19,10 @@ var currentCitiesObjects = utils.currentCities;
  */
 var citiesArray = utils.currentCitiesArray;
 
+/**
+ * Array containing all the possible cities names. It is used by the client to perform autocomplete on search.
+ * @type {*[]}
+ */
 var citiesNames = [];
 utils.cityData.forEach(function (city) {
     citiesNames.push(city.name);
@@ -107,7 +110,7 @@ router.get('/cities', function (req, res, next) {
 router.put('/cities/sort/:sortBy', urlencodedParser, function (req, res, next) {
     try{
         res.status(200);
-        var sortBy = req.params.sortBy;
+        const sortBy = req.params.sortBy;
         utils.currentCitiesArray = citiesArray.sort(function (itemA, itemB) {
             const isAscending = req.query.ascending === "true";
             const result = itemA[sortBy] > itemB[sortBy];

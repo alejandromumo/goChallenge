@@ -1,3 +1,8 @@
+/**
+ * Function to perform autocomplete on the search bar.
+ * Retrieved from: https://www.w3schools.com/howto/howto_js_autocomplete.asp
+ * @param inp
+ */
 function autocomplete(inp) {
     const arr = JSON.parse(localStorage.getItem("cityData") || "[]");
     /*the autocomplete function takes two arguments,
@@ -106,6 +111,10 @@ function autocomplete(inp) {
     });
 }
 
+/**
+ *  Callback to add a city to the collection. It will create a request, type POST, to the server.
+ *  If something goes wrong, it will display the error message in an alert window.
+ */
 function addCity(){
     const city = document.getElementById("cityInput").value;
     $.ajax({
@@ -125,6 +134,10 @@ function addCity(){
     })
 }
 
+/**
+ *  Callback to update all cities weather information. It will create a request, type PUT, to the server.
+ *  If something goes wrong, it will display the error message in an alert window.
+ */
 function updateAll(){
     $.ajax({
         type: 'PUT',
@@ -139,6 +152,11 @@ function updateAll(){
     })
 }
 
+/**
+ *  *  Callback to update a city's weather information. It will create a request, type PUT, to the server.
+ *  If something goes wrong, it will display the error message in an alert window.
+ * @param cityName city to be updated.
+ */
 function updateCity(cityName){
     $.ajax({
         type: 'PUT',
@@ -153,6 +171,11 @@ function updateCity(cityName){
     });
 }
 
+/**
+ *  Callback to delete a city. It will create a request, type DELETE, to the server.
+ *  If something goes wrong, it will display the error message in an alert window.
+ * @param cityName city to be deleted.
+ */
 function deleteCity(cityName){
     $.ajax({
         type: 'DELETE',
@@ -168,6 +191,10 @@ function deleteCity(cityName){
 }
 
 
+/**
+ * Callback to open the modal.
+ * @param cityName selected city name.
+ */
 function openModal(cityName) {
     $.ajax({
         type: 'GET',
@@ -184,10 +211,17 @@ function openModal(cityName) {
     });
 }
 
+/**
+ * Callback to close the modal.
+ */
 function closeModal() {
     $("#myModal").css("display", "none");
 }
 
+/**
+ * Executed every time the page loads. Used to retrieve all possible cities names and to attach an event handler
+ * to the auto complete search bar.
+ */
 $(document).ready(function () {
     if(localStorage.getItem("cityData") === null)
     {
@@ -196,6 +230,7 @@ $(document).ready(function () {
             url: `/api/cities/cityData`,
             success: function (data) {
                 localStorage.setItem("cityData", JSON.stringify(data));
+                location.reload();
             },
             error: function(xhr, textStatus, thrownError){
                 alert(xhr.statusText);
@@ -213,6 +248,9 @@ $(document).ready(function () {
     );
 })
 
+/**
+ * Executed every time the page loads. Used to retrieve the current metric system.
+ */
 $(document).ready(function(){
     if(localStorage.getItem("metricSystem") === null)
     {
