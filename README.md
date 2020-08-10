@@ -40,6 +40,5 @@ The application uses HTTPS. This requires a SSL certificate that, in turn, requi
 ## Tutorial
 Even though the application is simple, there are a few notes that should be specified.
 
-*
-*
-*
+* In order to retrieve weather data, at least three cities must be added.
+* Cities have a cooldown effect, i.e., each request for the same city can only be performed after 10 minutes of the previous request. This is recommended by the [Open Weather Map API](https://openweathermap.org/appid) (Section "Tips on how to use API effectively").
