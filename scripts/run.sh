@@ -1,1 +1,0 @@
-node NODE_ENV=dev app

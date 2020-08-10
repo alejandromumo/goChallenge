@@ -2,8 +2,6 @@
   <configuration default="false" name="bin\www" type="NodeJSConfigurationType" path-to-node="node" node-parameters="C:\Users\ManuelCosta\AppData\Roaming\npm\node_modules\nodemon\bin\nodemon.js" path-to-js-file="bin/www" show_console_on_std_out="true" working-dir="$PROJECT_DIR$">
     <envs>
       <env name="DEBUG" value="gochallenge:* " />
-      <env name="NODE_ENV" value="production" />
-      <env name="PORT" value="6575" />
     </envs>
     <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
       <browser url="http://localhost:3000/" />
